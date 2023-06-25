@@ -3,7 +3,7 @@ import FullList from '../model/FullList';
 interface DOMList{
     ul: HTMLUListElement,
     clear(): void,
-    render(FullList:FullList):void
+    render(fullList:FullList):void
 }
 
 export default class ListTemplate implements DOMList{
@@ -20,37 +20,28 @@ export default class ListTemplate implements DOMList{
         this.ul.innerHTML = ''
     }
 
-    render(FullList: FullList): void {
+    render(fullList: FullList): void {
         this.clear()
 
-        FullList.list.forEach(item => {
+        fullList.list.forEach(item => {
             
             const li = document.createElement('li') as HTMLLIElement
-
             li.className = "item"
 
-            const check = document.createElement('input') as HTMLInputElement
-
+            const check = document.createElement("input") as HTMLInputElement
+            check.type = "checkbox"
             check.id = item.id
-
-            check.tabIndex = 0
-
             check.checked = item.checked
-
             li.append(check)
-
 
             check.addEventListener('change', () => {
                 item.checked = !item.checked
-                FullList.save()
+                fullList.save()
             })
 
             const label = document.createElement('label') as HTMLLabelElement
-
             label.htmlFor = item.id
-
             label.textContent = item.item
-            
             li.append(label)
 
             const button = document.createElement('button') as HTMLButtonElement
@@ -59,8 +50,8 @@ export default class ListTemplate implements DOMList{
             li.append(button)
 
             button.addEventListener('click', () => {
-                FullList.removeItem(item.id)
-                this.render(FullList)
+                fullList.removeItem(item.id)
+                this.render(fullList)
             })
 
             this.ul.append(li)
